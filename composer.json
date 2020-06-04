@@ -1,0 +1,7 @@
+{
+    "name": "ruslankuga/php-project-lvl2",
+    "type": "project",
+    "require": {
+        "docopt/docopt": "^1.0"
+    }
+}
