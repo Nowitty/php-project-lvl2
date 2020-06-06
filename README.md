@@ -1,6 +1,6 @@
 # php-project-lvl2
 
-<a href="https://codeclimate.com/github/Nowitty/php-project-lvl2/maintainability"><img src="https://api.codeclimate.com/v1/badges/411831c53c9235896a42/maintainability" /></a>
+https://travis-ci.com/Nowitty/php-project-lvl2.svg?branch=master
 
 
 [![Build Status](https://travis-ci.com/Nowitty/php-project-lvl2.svg?branch=master)](https://travis-ci.com/Nowitty/php-project-lvl2)
