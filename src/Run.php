@@ -1,7 +1,9 @@
 <?php
 
 namespace Differ;
+
 use function Differ\genDiff;
+
 const VERSION = 'gendiff v0.1';
 const DOC = "
     Generate diff
@@ -19,5 +21,5 @@ const DOC = "
 function run()
 {
     //genDiff('firstJson.json', 'secondJson.json');
-    $args = \Docopt::handle(DOC, ['version'=> VERSION]);
+    $args = \Docopt::handle(DOC, ['version' => VERSION]);
 }
