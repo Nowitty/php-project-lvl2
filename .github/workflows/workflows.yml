@@ -3,11 +3,21 @@ name: Differ-workflow-test
 on: [push, pull_request]
 
 jobs:
-  build:
+  buildAneTest:
     # This job runs on Linux
     runs-on: ubuntu-latest
     steps:
-
+      # Check-out repository under GitHub workspace
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v2
+        # Step's name
+      - name: Setup PHP
+        # Action gives to setup the PHP environment to test application
+        # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@v1
+        with:
+          # Specify the PHP version
+          php-version: '7.4'
       - name: Install
         run: make install
       - name: Lint
