@@ -1,5 +1,4 @@
-# Name of workflow
-name: PHP CI
+name: Differ-workflow-test
 
 # Trigger the workflow on push or pull request
 on:
