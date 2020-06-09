@@ -17,7 +17,6 @@ class GenDiffTest extends TestCase
 
     public function testGenDiff()
     {
-        var_dump($this->fixtures);
         $filePath1 = $this->fixtures . 'firstJson.json';
         $filePath2 = $this->fixtures . 'secondJson.json';
         $expected = file_get_contents($this->fixtures . 'result.txt');
