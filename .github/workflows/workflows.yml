@@ -23,7 +23,6 @@ jobs:
       - name: Lint
         run: make lint
       - name: Test
-        run: make test
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
