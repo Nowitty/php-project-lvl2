@@ -20,7 +20,7 @@ function buildStr($arrBefore, $arrAfter)
         'deleted' => '',
         'added' => ''
     ];
-    $result['added'] = array_reduce($keysDiff, fn($acc, $key) => 
+    $result['added'] = array_reduce($keysDiff, fn($acc, $key) =>
     $acc .= "  + {$key}: " . correctValue($arrAfter[$key]) . "\n", '');
 
     foreach ($keysBefore as $key) {
@@ -38,7 +38,7 @@ function buildStr($arrBefore, $arrAfter)
         $result['changed'] .= "  - {$key}: " . correctValue($arrBefore[$key]) . "\n";
     }
 
-    return "{\n". implode('', $result) . "}";
+    return "{\n" . implode('', $result) . "}";
 }
 
 function parseFlatJson($pathToFile1, $pathToFile2)
@@ -49,7 +49,7 @@ function parseFlatJson($pathToFile1, $pathToFile2)
     return [json_decode($file1, true), json_decode($file2, true)];
 }
 // correct bool value
-function correctValue($value) 
+function correctValue($value)
 {
     if ($value === true) {
         return 'true';
