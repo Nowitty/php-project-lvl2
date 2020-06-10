@@ -10,9 +10,6 @@ if (file_exists($autoloadPath1)) {
 }
 
 use function Differ\run;
-//var_dump(__DIR__);
-//$d = Differ\genDiff('../test.json', 'secondJson.json');
-//print($d);
 
 run();
 ?>

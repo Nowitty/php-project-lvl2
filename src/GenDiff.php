@@ -2,9 +2,11 @@
 
 namespace Differ;
 
+use function Differ\Parser\parse;
+
 function genDiff($pathToFile1, $pathToFile2)
 {
-    [$arrBefore, $arrAfter] = parseFlatJson($pathToFile1, $pathToFile2);
+    [$arrBefore, $arrAfter] = parse($pathToFile1, $pathToFile2);
     $result = buildStr($arrBefore, $arrAfter);
     return $result;
 }
@@ -41,13 +43,6 @@ function buildStr($arrBefore, $arrAfter)
     return "{\n" . implode('', $result) . "}";
 }
 
-function parseFlatJson($pathToFile1, $pathToFile2)
-{
-    $file1 = file_get_contents($pathToFile1);
-    $file2 = file_get_contents($pathToFile2);
-
-    return [json_decode($file1, true), json_decode($file2, true)];
-}
 // correct bool value
 function correctValue($value)
 {
