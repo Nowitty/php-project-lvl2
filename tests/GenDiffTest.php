@@ -26,5 +26,10 @@ class GenDiffTest extends TestCase
         $filePath2 = $this->fixtures . 'secondYml.yml';
         $expected = file_get_contents($this->fixtures . 'result');
         $this->assertEquals($expected, genDiff($filePath1, $filePath2));
+
+        $filePath1 = $this->fixtures . 'firstJsonTree.json';
+        $filePath2 = $this->fixtures . 'secondJsonTree.json';
+        $expected = file_get_contents($this->fixtures . 'resultTree');
+        //$this->assertEquals($expected, genDiff($filePath1, $filePath2));
     }
 }
