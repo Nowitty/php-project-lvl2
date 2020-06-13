@@ -19,7 +19,8 @@
         "files": [
           "src/Run.php",
           "src/GenDiff.php",
-          "src/Parsers.php"
+          "src/Parsers.php",
+          "src/Render.php"
         ]
       }
 }

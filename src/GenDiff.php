@@ -3,13 +3,16 @@
 namespace Differ;
 
 use function Differ\Parser\parse;
+use function Differ\Render\render;
 
 function genDiff($pathToFile1, $pathToFile2)
 {
     [$arrBefore, $arrAfter] = parse($pathToFile1, $pathToFile2);
     //var_dump($arrBefore);
-    $result = buildDiffTree($arrBefore, $arrAfter);
-    var_dump($result);
+    $tree = buildDiffTree($arrBefore, $arrAfter);
+    //var_dump($tree);
+    $result = render($tree);
+    print($result);
     // return $result;
 }
 function buildDiffTree($before, $after)
@@ -22,7 +25,8 @@ function buildDiffTree($before, $after)
             if (is_array($before[$key]) && is_array($after[$key])) {
                 $acc[] = [
                     'name' => $key,
-                    'type' => 'notChanged',
+                    'type' => 'parent',
+                    'state' => 'notChanged',
                     'children' => buildDiffTree($before[$key], $after[$key])
                 ];
                 return $acc;
@@ -30,14 +34,16 @@ function buildDiffTree($before, $after)
                 if ($before[$key] === $after[$key]) {
                     $acc[] = [
                         'name' => $key,
-                        'type' => 'notChanged',
+                        'type' => 'child',
+                        'state' => 'notChanged',
                         'value' => $before[$key]
                     ];
                     return $acc;
                 } else {
                     $acc[] = [
                         'name' => $key,
-                        'type' => 'changed',
+                        'type' => 'child',
+                        'state' => 'changed',
                         'valueAfter' => $after[$key],
                         'valueBefore' => $before[$key]
                     ];
@@ -46,18 +52,38 @@ function buildDiffTree($before, $after)
             }   
         }
         if (in_array($key, $keysAfter) && !in_array($key, $keysBefore)) {
-            $acc[] = [
-                'name' => $key,
-                'type' => 'added',
-                'value' => $after[$key]
-            ];
+            if (is_array($after[$key])) {
+                $acc[] = [
+                    'name' => $key,
+                    'type' => 'parent',
+                    'state' => 'added',
+                    'children' => buildDiffTree([], $after[$key])
+                ];
+            } else {
+                $acc[] = [
+                    'name' => $key,
+                    'type' => 'child',
+                    'state' => 'added',
+                    'value' => $after[$key]
+                ];
+            }
         }
         if (!in_array($key, $keysAfter) && in_array($key, $keysBefore)) {
-            $acc[] = [
-                'name' => $key,
-                'type' => 'deleted',
-                'value' => $before[$key]
-            ];
+            if (is_array($before[$key])) {
+                $acc[] = [
+                    'name' => $key,
+                    'type' => 'parent',
+                    'state' => 'deleted',
+                    'children' => buildDiffTree($before[$key], [])
+                ];
+            } else {
+                $acc[] = [
+                    'name' => $key,
+                    'type' => 'child',
+                    'state' => 'deleted',
+                    'value' => $before[$key]
+                ];
+            }
         }
         return $acc;
     }, []);
