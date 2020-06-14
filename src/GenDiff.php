@@ -8,12 +8,9 @@ use function Differ\Render\render;
 function genDiff($pathToFile1, $pathToFile2)
 {
     [$arrBefore, $arrAfter] = parse($pathToFile1, $pathToFile2);
-    //var_dump($arrBefore);
     $tree = buildDiffTree($arrBefore, $arrAfter);
-    //var_dump($tree);
     $result = render($tree);
-    print($result);
-    // return $result;
+    return "{\n" . $result . "}";
 }
 function buildDiffTree($before, $after)
 {
@@ -51,7 +48,7 @@ function buildDiffTree($before, $after)
                 }
             }   
         }
-        if (in_array($key, $keysAfter) && !in_array($key, $keysBefore)) {
+        if (!in_array($key, $keysBefore)) {
             if (is_array($after[$key])) {
                 $acc[] = [
                     'name' => $key,
@@ -68,7 +65,7 @@ function buildDiffTree($before, $after)
                 ];
             }
         }
-        if (!in_array($key, $keysAfter) && in_array($key, $keysBefore)) {
+        if (!in_array($key, $keysAfter)) {
             if (is_array($before[$key])) {
                 $acc[] = [
                     'name' => $key,
@@ -91,46 +88,4 @@ function buildDiffTree($before, $after)
     return $tree;
     
 }
-// function buildStr($arrBefore, $arrAfter)
-// {
-//     $keysBefore = array_keys($arrBefore);
-//     $keysAfter = array_keys($arrAfter);
-//     $keysDiff = array_diff($keysAfter, $keysBefore);
-//     $result = [
-//         'notChanged' => '',
-//         'changed' => '',
-//         'deleted' => '',
-//         'added' => ''
-//     ];
-//     $result['added'] = array_reduce($keysDiff, fn($acc, $key) =>
-//     $acc .= "  + {$key}: " . correctValue($arrAfter[$key]) . "\n", '');
 
-//     foreach ($keysBefore as $key) {
-//         if (array_key_exists($key, $arrAfter)) {
-//             if ($arrBefore[$key] === $arrAfter[$key]) {
-//                 $result['notChanged'] .= "    {$key}: " . correctValue($arrBefore[$key]) . "\n";
-//                 continue;
-//             }
-//         }
-//         if (!array_key_exists($key, $arrAfter)) {
-//             $result['deleted'] .= "  - {$key}: " . correctValue($arrBefore[$key]) . "\n";
-//             continue;
-//         }
-//         $result['changed'] .= "  + {$key}: " . correctValue($arrAfter[$key]) . "\n";
-//         $result['changed'] .= "  - {$key}: " . correctValue($arrBefore[$key]) . "\n";
-//     }
-
-//     return "{\n" . implode('', $result) . "}";
-// }
-
-// correct bool value
-function correctValue($value)
-{
-    if ($value === true) {
-        return 'true';
-    }
-    if ($value === false) {
-        return 'false';
-    }
-    return $value;
-}

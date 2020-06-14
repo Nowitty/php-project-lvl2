@@ -2,45 +2,6 @@
 
 namespace Differ\Render;
 
-
-// function render($tree)
-// {
-//     // var_dump($tree);
-//     // echo "\n --------\n";
-//     $result = array_map(function($node) {
-//         //
-//         if ($node['type'] == 'parent') {
-//             if ($node['state'] == 'notChanged') {
-//                 return "    {$node['name']}: {\n" . render($node['children']) . "    }\n";
-//             }
-//             if ($node['state'] == 'added') {
-//                 return "  + {$node['name']}: {\n" . render($node['children']) . "    }\n";
-//             }
-//             if ($node['state'] == 'deleted') {
-//                 return "  - {$node['name']}: {\n" . render($node['children']) . "    }\n";
-//             }
-            
-//         } else {
-//             if ($node['state'] == 'notChanged') {
-//                 return "        {$node['name']}: {$node['value']}\n    ";
-//             }
-//             if ($node['state'] == 'changed') {
-//                 $before = "      - {$node['name']}: {$node['valueBefore']}\n    ";
-//                 $after = "      + {$node['name']}: {$node['valueAfter']}\n    ";
-//                 return $after . $before;
-//             }
-//             if ($node['state'] == 'added') {
-//                 return "  + {$node['name']}: {$node['value']}\n    ";
-//             }
-//             if ($node['state'] == 'deleted') {
-//                 return "  - {$node['name']}: {$node['value']}\n    ";
-//             }
-//         }
-//     }, $tree);
-
-//     return implode('',$result);
-// }
-
 function render($tree, $depth = 1)
 {
     $result = array_reduce($tree, function($acc, $node) use ($depth) {
@@ -50,30 +11,56 @@ function render($tree, $depth = 1)
                 $acc .= "{$spaces}  {$node['name']}: {\n" . render($node['children'], $depth + 1) . "{$spaces}  }\n";
             }
             if ($node['state'] == 'added') {
-                $acc .= "{$spaces}+ {$node['name']}: {\n" . render($node['children'], $depth + 1) . "{$spaces}  }\n";
+                $newChildren = correctChildren($node['children']);
+                $acc .= "{$spaces}+ {$node['name']}: {\n" . render($newChildren, $depth + 1) . "{$spaces}  }\n";
             }
             if ($node['state'] == 'deleted') {
-                $acc .= "{$spaces}- {$node['name']}: {\n" . render($node['children'], $depth + 1) . "{$spaces}  }\n";
+                $newChildren = correctChildren($node['children']);
+                $acc .= "{$spaces}- {$node['name']}: {\n" . render($newChildren, $depth + 1) . "{$spaces}  }\n";
             }
             
         } else {
             if ($node['state'] == 'notChanged') {
-                $acc .= "{$spaces}  {$node['name']}: {$node['value']}\n";
+                $acc .= "{$spaces}  {$node['name']}: " . correctValue($node['value']) . "\n";
             }
             if ($node['state'] == 'changed') {
-                $before = "{$spaces}- {$node['name']}: {$node['valueBefore']}\n";
-                $after = "{$spaces}+ {$node['name']}: {$node['valueAfter']}\n";
+                $before = "{$spaces}- {$node['name']}: " . correctValue($node['valueBefore']) . "\n";
+                $after = "{$spaces}+ {$node['name']}: " . correctValue($node['valueAfter']) . "\n";
                 $acc .= $after . $before;
             }
             if ($node['state'] == 'added') {
-                $acc .= "{$spaces}+ {$node['name']}: {$node['value']}\n";
+                $acc .= "{$spaces}+ {$node['name']}: " . correctValue($node['value']) . "\n";
             }
             if ($node['state'] == 'deleted') {
-                $acc .= "{$spaces}- {$node['name']}: {$node['value']}\n";
+                $acc .= "{$spaces}- {$node['name']}: " . correctValue($node['value']) . "\n";
             }
         }
         return $acc;
     }, '');
 
     return $result;
+}
+
+function correctChildren($node)
+{
+    $res = array_map(function($item) {
+        $item['state'] = 'notChanged';
+        if ($item['type'] == 'parent') {
+           return correctChildren($item['children']); 
+        }
+        return $item; 
+    }, $node);
+
+    return $res;
+}
+
+function correctValue($value)
+{
+    if ($value === true) {
+        return 'true';
+    }
+    if ($value === false) {
+        return 'false';
+    }
+    return $value;
 }
