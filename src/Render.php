@@ -4,7 +4,7 @@ namespace Differ\Render;
 
 function render($tree, $depth = 1)
 {
-    $result = array_reduce($tree, function($acc, $node) use ($depth) {
+    $result = array_reduce($tree, function ($acc, $node) use ($depth) {
         $spaces = str_repeat(' ', $depth * 4 - 2);
         if ($node['type'] == 'parent') {
             if ($node['state'] == 'notChanged') {
@@ -18,7 +18,6 @@ function render($tree, $depth = 1)
                 $newChildren = correctChildren($node['children']);
                 $acc .= "{$spaces}- {$node['name']}: {\n" . render($newChildren, $depth + 1) . "{$spaces}  }\n";
             }
-            
         } else {
             if ($node['state'] == 'notChanged') {
                 $acc .= "{$spaces}  {$node['name']}: " . correctValue($node['value']) . "\n";
@@ -43,12 +42,12 @@ function render($tree, $depth = 1)
 
 function correctChildren($node)
 {
-    $res = array_map(function($item) {
+    $res = array_map(function ($item) {
         $item['state'] = 'notChanged';
         if ($item['type'] == 'parent') {
-           return correctChildren($item['children']); 
+            return correctChildren($item['children']);
         }
-        return $item; 
+        return $item;
     }, $node);
 
     return $res;

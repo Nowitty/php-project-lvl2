@@ -46,7 +46,7 @@ function buildDiffTree($before, $after)
                     ];
                     return $acc;
                 }
-            }   
+            }
         }
         if (!in_array($key, $keysBefore)) {
             if (is_array($after[$key])) {
@@ -86,6 +86,4 @@ function buildDiffTree($before, $after)
     }, []);
 
     return $tree;
-    
 }
-
