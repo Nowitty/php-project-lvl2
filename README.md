@@ -12,7 +12,7 @@ Differ
 
 ## Installation
 
-You need use Composer, you can install brain-games system-wide with the following command:
+You need use Composer, you can install with the following command:
         `composer global require ruslankuga/php-project-lvl2`
 
 
