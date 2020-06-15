@@ -1,6 +1,7 @@
 {
     "name": "ruslankuga/php-project-lvl2",
     "type": "project",
+    "license": "MIT",
     "require": {
         "docopt/docopt": "^1.0",
         "symfony/yaml": "^5.1"
