@@ -1,6 +1,6 @@
 <?php
 
-namespace Differ\Render;
+namespace Differ\Formatters\Pretty;
 
 function render($tree, $depth = 1)
 {

@@ -20,7 +20,8 @@
           "src/Run.php",
           "src/GenDiff.php",
           "src/Parsers.php",
-          "src/Render.php"
+          "src/Formatters/PrettyFormatter.php",
+          "src/Formatters/PlainFormatter.php"
         ]
       }
 }

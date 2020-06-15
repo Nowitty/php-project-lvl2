@@ -23,6 +23,7 @@ function run()
     $args = \Docopt::handle(DOC, ['version' => VERSION]);
     $file1 = $args['<firstfile>'];
     $file2 = $args['<secondfile>'];
-    $diff = genDiff($file1, $file2);
+    $format = $args['--format'];
+    $diff = genDiff($file1, $file2, $format);
     print_r($diff);
 }

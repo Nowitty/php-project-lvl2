@@ -3,15 +3,28 @@
 namespace Differ;
 
 use function Differ\Parser\parse;
-use function Differ\Render\render;
 
-function genDiff($pathToFile1, $pathToFile2)
+function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
 {
     [$arrBefore, $arrAfter] = parse($pathToFile1, $pathToFile2);
     $tree = buildDiffTree($arrBefore, $arrAfter);
-    $result = render($tree);
-    return "{\n" . $result . "}";
+    $result = format($tree, $format);
+    return $result;
 }
+
+function format($tree, $format)
+{
+    $format = mb_strtolower($format);
+    switch ($format) {
+        case 'pretty':
+            return "{\n" . Formatters\Pretty\render($tree) . "}";
+        case 'plain':
+            return Formatters\Plain\render($tree);
+        default:
+            echo 'unknow format';
+    }
+}
+
 function buildDiffTree($before, $after)
 {
     $keysBefore = array_keys($before);
