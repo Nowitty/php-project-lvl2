@@ -7,7 +7,7 @@ function render($tree, $parents = '')
     if ($parents !== '') {
         $parents .= '.';
     }
-    $result = array_map(function($node) use ($parents) {
+    $result = array_map(function ($node) use ($parents) {
         if ($node['type'] == 'parent') {
             if ($node['state'] == 'deleted') {
                 return "Property '{$parents}{$node['name']}' was removed\n";
@@ -19,7 +19,7 @@ function render($tree, $parents = '')
         } else {
             switch ($node['state']) {
                 case 'added':
-                    return "Property '{$parents}{$node['name']}' was added with value: '" . 
+                    return "Property '{$parents}{$node['name']}' was added with value: '" .
                     correctValue($node['value']) . "'\n";
                 case 'deleted':
                     return "Property '{$parents}{$node['name']}' was removed\n";

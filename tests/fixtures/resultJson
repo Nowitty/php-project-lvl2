@@ -1,0 +1,27 @@
+[
+    {
+        "name": "host",
+        "type": "child",
+        "state": "notChanged",
+        "value": "hexlet.io"
+    },
+    {
+        "name": "timeout",
+        "type": "child",
+        "state": "changed",
+        "valueAfter": 20,
+        "valueBefore": 50
+    },
+    {
+        "name": "proxy",
+        "type": "child",
+        "state": "deleted",
+        "value": "123.234.53.22"
+    },
+    {
+        "name": "verbose",
+        "type": "child",
+        "state": "added",
+        "value": true
+    }
+]

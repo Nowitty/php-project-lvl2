@@ -20,6 +20,8 @@ function format($tree, $format)
             return "{\n" . Formatters\Pretty\render($tree) . "}";
         case 'plain':
             return Formatters\Plain\render($tree);
+        case 'json':
+            return Formatters\Json\render($tree);
         default:
             echo 'unknow format';
     }
