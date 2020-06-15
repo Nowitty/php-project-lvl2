@@ -13,6 +13,6 @@ Differ
 ## Installation
 
 You need use Composer, you can install brain-games system-wide with the following command:
-        `composer global require "nowitty/php-project-lvl2"`
+        `composer global require ruslankuga/php-project-lvl2`
 
 
