@@ -8,7 +8,7 @@ function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
 {
     [$arrBefore, $arrAfter] = parse($pathToFile1, $pathToFile2);
     $tree = buildDiffTree($arrBefore, $arrAfter);
-    var_dump($tree);
+    print_r($tree);
     die();
     $result = format($tree, $format);
     return $result;
@@ -33,107 +33,34 @@ function buildDiffTree($before, $after)
 {
     $keysBefore = array_keys($before);
     $keysAfter = array_keys($after);
-    $keysUnique = array_unique(array_merge($keysBefore, $keysAfter));
+    $keysUnique = array_values(array_unique(array_merge($keysBefore, $keysAfter)));
 
     $tree = array_map(function($key) use ($keysBefore, $before, $keysAfter, $after) {
-        $default = [
-            'name' => $key,
-            'type' => 'fixed'
-        ];
         if (!in_array($key, $keysBefore)) {
-            return array_merge($default, ['type' => 'added', 'value' => $after[$key]]);
+            return buildNode($key, ['type' => 'added', 'value' => $after[$key]]);
         }
         if (!in_array($key, $keysAfter)) {
-            return array_merge($default, ['type' => 'deleted', 'value' => $before[$key]]);
+            return buildNode($key, ['type' => 'deleted', 'value' => $before[$key]]);
         }
         if (is_array($before[$key]) && is_array($after[$key])) {
-            return array_merge($default, 
-                ['type' => 'nested', 'children' => buildDiffTree($before[$key], $after[$key])]);
+            return buildNode($key, ['type' => 'nested', 'children' => buildDiffTree($before[$key], $after[$key])]);
         }
         if ($before[$key] == $after[$key]) {
-            return array_merge($default, ['type' => 'unchanged', 'value' => $before[$key]]);
+            return buildNode($key, ['type' => 'unchanged', 'value' => $before[$key]]);
         }
         if ($before[$key] !== $after[$key]) {
-            return array_merge($default, 
-                ['type' => 'changed', 'valueAfter' => $after[$key], 'valueBefore' => $before[$key]]);
+            return buildNode($key, ['type' => 'changed', 'valueAfter' => $after[$key], 'valueBefore' => $before[$key]]);
         }
     }, $keysUnique);
     
     return $tree;
 }
 
-// function buildDiffTree($before, $after)
-// {
-//     $keysBefore = array_keys($before);
-//     $keysAfter = array_keys($after);
-//     $keysUnique = array_unique(array_merge($keysBefore, $keysAfter));
-//     $tree = array_reduce($keysUnique, function ($acc, $key) use ($keysBefore, $before, $keysAfter, $after) {
-//         if (in_array($key, $keysAfter) && in_array($key, $keysBefore)) {
-//             if (is_array($before[$key]) && is_array($after[$key])) {
-//                 $acc[] = [
-//                     'name' => $key,
-//                     'type' => 'parent',
-//                     'state' => 'notChanged',
-//                     'children' => buildDiffTree($before[$key], $after[$key])
-//                 ];
-//                 return $acc;
-//             } else {
-//                 if ($before[$key] === $after[$key]) {
-//                     $acc[] = [
-//                         'name' => $key,
-//                         'type' => 'child',
-//                         'state' => 'notChanged',
-//                         'value' => $before[$key]
-//                     ];
-//                     return $acc;
-//                 } else {
-//                     $acc[] = [
-//                         'name' => $key,
-//                         'type' => 'child',
-//                         'state' => 'changed',
-//                         'valueAfter' => $after[$key],
-//                         'valueBefore' => $before[$key]
-//                     ];
-//                     return $acc;
-//                 }
-//             }
-//         }
-//         if (!in_array($key, $keysBefore)) {
-//             if (is_array($after[$key])) {
-//                 $acc[] = [
-//                     'name' => $key,
-//                     'type' => 'parent',
-//                     'state' => 'added',
-//                     'children' => buildDiffTree([], $after[$key])
-//                 ];
-//             } else {
-//                 $acc[] = [
-//                     'name' => $key,
-//                     'type' => 'child',
-//                     'state' => 'added',
-//                     'value' => $after[$key]
-//                 ];
-//             }
-//         }
-//         if (!in_array($key, $keysAfter)) {
-//             if (is_array($before[$key])) {
-//                 $acc[] = [
-//                     'name' => $key,
-//                     'type' => 'parent',
-//                     'state' => 'deleted',
-//                     'children' => buildDiffTree($before[$key], [])
-//                 ];
-//             } else {
-//                 $acc[] = [
-//                     'name' => $key,
-//                     'type' => 'child',
-//                     'state' => 'deleted',
-//                     'value' => $before[$key]
-//                 ];
-//             }
-//         }
-//         return $acc;
-//     }, []);
-
-//     return $tree;
-// }
+function buildNode($key, $params)
+{
+    $default = [
+        'name' => $key,
+        'type' => 'fixed'
+    ];
+    return array_merge($default, $params);
+}
