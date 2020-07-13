@@ -8,8 +8,6 @@ function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
 {
     [$arrBefore, $arrAfter] = parse($pathToFile1, $pathToFile2);
     $tree = buildDiffTree($arrBefore, $arrAfter);
-    print_r($tree);
-    die();
     $result = format($tree, $format);
     return $result;
 }
@@ -19,7 +17,7 @@ function format($tree, $format)
     $format = mb_strtolower($format);
     switch ($format) {
         case 'pretty':
-            return "{\n" . Formatters\Pretty\render($tree) . "}";
+            return "{\n" . Formatters\Pretty\render($tree) . "\n}";
         case 'plain':
             return Formatters\Plain\render($tree);
         case 'json':

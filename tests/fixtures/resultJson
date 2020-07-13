@@ -1,27 +1,73 @@
 [
     {
-        "name": "host",
-        "type": "child",
-        "state": "notChanged",
-        "value": "hexlet.io"
+        "name": "common",
+        "type": "nested",
+        "children": [
+            {
+                "name": "setting1",
+                "type": "unchanged",
+                "value": "Value 1"
+            },
+            {
+                "name": "setting2",
+                "type": "deleted",
+                "value": "200"
+            },
+            {
+                "name": "setting3",
+                "type": "unchanged",
+                "value": true
+            },
+            {
+                "name": "setting6",
+                "type": "deleted",
+                "value": {
+                    "key": "value"
+                }
+            },
+            {
+                "name": "setting4",
+                "type": "added",
+                "value": "blah blah"
+            },
+            {
+                "name": "setting5",
+                "type": "added",
+                "value": {
+                    "key5": "value5"
+                }
+            }
+        ]
     },
     {
-        "name": "timeout",
-        "type": "child",
-        "state": "changed",
-        "valueAfter": 20,
-        "valueBefore": 50
+        "name": "group1",
+        "type": "nested",
+        "children": [
+            {
+                "name": "baz",
+                "type": "changed",
+                "valueAfter": "bars",
+                "valueBefore": "bas"
+            },
+            {
+                "name": "foo",
+                "type": "unchanged",
+                "value": "bar"
+            }
+        ]
     },
     {
-        "name": "proxy",
-        "type": "child",
-        "state": "deleted",
-        "value": "123.234.53.22"
+        "name": "group2",
+        "type": "deleted",
+        "value": {
+            "abc": "12345"
+        }
     },
     {
-        "name": "verbose",
-        "type": "child",
-        "state": "added",
-        "value": true
+        "name": "group3",
+        "type": "added",
+        "value": {
+            "fee": "100500"
+        }
     }
 ]
