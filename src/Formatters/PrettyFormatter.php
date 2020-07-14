@@ -21,7 +21,7 @@ function render($tree, $depth = 1)
                 $after = $spaces . "+ " . $name . ": " . renderValue($node['valueAfter'], $depth);
                 return $after . "\n" . $before;
             case 'unchanged':
-                return $spaces. '  ' . $name . ": " . renderValue($value, $depth);
+                return $spaces . '  ' . $name . ": " . renderValue($value, $depth);
         }
     }, $tree);
     

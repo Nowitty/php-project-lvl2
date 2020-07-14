@@ -3,6 +3,7 @@
 namespace Differ;
 
 use function Differ\Parser\parse;
+use function Differ\Formatters\format;
 
 function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
 {
@@ -12,28 +13,13 @@ function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
     return $result;
 }
 
-function format($tree, $format)
-{
-    $format = mb_strtolower($format);
-    switch ($format) {
-        case 'pretty':
-            return "{\n" . Formatters\Pretty\render($tree) . "\n}";
-        case 'plain':
-            return Formatters\Plain\render($tree);
-        case 'json':
-            return Formatters\Json\render($tree);
-        default:
-            echo 'unknow format';
-    }
-}
-
 function buildDiffTree($before, $after)
 {
     $keysBefore = array_keys($before);
     $keysAfter = array_keys($after);
     $keysUnique = array_values(array_unique(array_merge($keysBefore, $keysAfter)));
 
-    $tree = array_map(function($key) use ($keysBefore, $before, $keysAfter, $after) {
+    $tree = array_map(function ($key) use ($keysBefore, $before, $keysAfter, $after) {
         if (!in_array($key, $keysBefore)) {
             return buildNode($key, ['type' => 'added', 'value' => $after[$key]]);
         }

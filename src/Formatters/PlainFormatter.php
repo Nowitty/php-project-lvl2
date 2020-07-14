@@ -8,37 +8,33 @@ function render($tree, $parents = '')
         $parents .= '.';
     }
     $result = array_map(function ($node) use ($parents) {
-        if ($node['type'] == 'parent') {
-            if ($node['state'] == 'deleted') {
-                return "Property '{$parents}{$node['name']}' was removed\n";
-            }
-            if ($node['state'] == 'added') {
-                return "Property '{$parents}{$node['name']}' was added with value: 'complex value'\n";
-            }
-            return render($node['children'], "{$parents}{$node['name']}");
-        } else {
-            switch ($node['state']) {
-                case 'added':
-                    return "Property '{$parents}{$node['name']}' was added with value: '" .
-                    correctValue($node['value']) . "'\n";
-                case 'deleted':
-                    return "Property '{$parents}{$node['name']}' was removed\n";
-                case 'changed':
-                    return "Property '{$parents}{$node['name']}' was changed. From '" .
-                    correctValue($node['valueBefore']) . "' to '" . correctValue($node['valueAfter']) . "'\n";
-            }
+        $value = $node['value'] ?? '';
+        $name = $node['name'] ?? '';
+
+        switch ($node['type']) {
+            case 'nested':
+                return render($node['children'], "{$parents}{$name}");
+            case 'added':
+                return "Property '{$parents}{$name}' was added with value: '" . renderValue($value) . "'\n";
+            case 'deleted':
+                return "Property '{$parents}{$name}' was removed\n";
+            case 'changed':
+                return "Property '{$parents}{$name}' was changed. From '" .
+                 renderValue($node['valueBefore']) . "' to '" . renderValue($node['valueAfter']) . "'\n";
         }
     }, $tree);
-    return implode('', $result);
+
+    return implode("", $result);
 }
 
-function correctValue($value)
+function renderValue($value)
 {
-    if ($value === true) {
-        return 'true';
+    switch (gettype($value)) {
+        case 'boolean':
+            return $value ? 'true' : 'false';
+        case 'array':
+            return 'complex value';
+        default:
+            return $value;
     }
-    if ($value === false) {
-        return 'false';
-    }
-    return $value;
 }
