@@ -1,3 +1,6 @@
 /vendor/
 .DS_Store
 tests/.DS_Store
+tests/fixtures/firstJson.json
+tests/fixtures/secondJson.json
+tests/fixtures/result
